@@ -10,20 +10,20 @@ dock = 0                                              # В доке или не�
 
 
 
-def warp1():                                          # 1 ПОТОК ОТВЕЧАЕТ ЗА ЛОКАЛ
+def warp_red():                                          # 1 ПОТОК ОТВЕЧАЕТ ЗА ЛОКАЛ
     while pyautogui.pixel(343,614) == (26,137,25):    # равен ЗЕЛЕНОМУ
         pass                                          # ничего не делать
     else:                                             # или
         global dock                                   # использование глобальной переменной dock
         if dock == 1:                                 # Если в доке, ничего не делаем
-            Thread(target=warp1).start()              # ничего не делать
+            Thread(target=warp_red).start()              # ничего не делать
         else:                                         # Или
             time.sleep(0.1)
             pyautogui.moveTo(343+RND(-30, 10),614+RND(-10,30))
             pyautogui.scroll(1000)
             time.sleep(1)
             if pyautogui.pixel(343,614) == (26,137,25):
-                Thread(target=warp1).start()
+                Thread(target=warp_red).start()
             else:
                 dock = 1                                  # Выставляем статус в доке
                 functions.dock()                          # Док в станцию
@@ -31,11 +31,11 @@ def warp1():                                          # 1 ПОТОК ОТВЕЧ�
                 functions.cargo()                         # Разгружаем корабль
                 functions.undock()                        # Андокаемся
                 dock = 0                                  # Корабль не в доке
-                Thread(target=warp1).start()              # Запуск многопоточности
+                Thread(target=warp_red).start()              # Запуск многопоточности
 
 
 
-def warp2():                                          # 2 ПОТОК ОТВЕЧАЕТ ЗА КАРГО
+def warp_nocheck():                                          # 2 ПОТОК ОТВЕЧАЕТ ЗА КАРГО
     while pyautogui.pixel(88,168) != (66,108,111):    # не равен ЗЕЛЕНОМУ
         pass                                          # ничего не делать
     else:                                             # или
@@ -49,12 +49,12 @@ def warp2():                                          # 2 ПОТОК ОТВЕЧ�
             functions.cargo()                         # Разгружаем корабль
             functions.undock()                        # Андокаемся
             dock = 0                                  # Корабль не в доке
-            Thread(target=warp2).start()              # Запуск многопоточности
+            Thread(target=warp_nocheck).start()              # Запуск многопоточности
 
 
-Thread(target=warp1).start()
-Thread(target=warp2).start()
-print(Thread(target=warp1).is_alive())
+Thread(target=warp_red).start()
+Thread(target=warp_nocheck).start()
+print(Thread(target=warp_red).is_alive())
 
 
 

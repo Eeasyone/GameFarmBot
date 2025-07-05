@@ -19,7 +19,7 @@ logger.add("logs\\log_{}.log".format(time1), format="[{level}] [{time:HH:mm:ss}]
 logger.info("СКРИПТ ЗАПУЩЕН!")
 
 @logger.catch
-def warp1():                                          # 1 ПОТОК ОТВЕЧАЕТ ЗА ЛОКАЛ
+def warp_red():                                          # 1 ПОТОК ОТВЕЧАЕТ ЗА ЛОКАЛ
     while pyautogui.pixel(342,465) == (26,137,25):    # равен ЗЕЛЕНОМУ
         if pyautogui.pixel(342,400) != (157,17,225):
             logger.warning("Не могу найти фиолетовый! Пролистываю.....")
@@ -27,11 +27,11 @@ def warp1():                                          # 1 ПОТОК ОТВЕЧ�
             pyautogui.moveTo(342+RND(-30, 10),465+RND(-10,30))
             pyautogui.scroll(1000)
             time.sleep(RND(2,3))
-            # Thread(target=1warp1).start()              # ничего не делать
+            # Thread(target=1warp_red).start()              # ничего не делать
     else:                                             # или
         global dock                                   # использование глобальной переменной dock
         if dock == 1:                                 # Если в доке, ничего не делаем
-            Thread(target=warp1).start()              # ничего не делать
+            Thread(target=warp_red).start()              # ничего не делать
         else:                                         # Или
             logger.warning("Зеленый не найден! Перепроверяю........")
             time.sleep(0.1)
@@ -39,7 +39,7 @@ def warp1():                                          # 1 ПОТОК ОТВЕЧ�
             pyautogui.scroll(1000)
             time.sleep(1)
             if pyautogui.pixel(341,465) == (26,137,25):
-                Thread(target=warp1).start()
+                Thread(target=warp_red).start()
             else:
                 global cargo
                 logger.info("Перепроверка неуспешна! Выключаю таймер и выставляю статус dock = 1")
@@ -61,14 +61,14 @@ def warp1():                                          # 1 ПОТОК ОТВЕЧ�
                 logger.info("Выставляем dock = 0")
                 dock = 0                                  # Корабль не в доке
                 logger.info("Запускаем поток заново!")
-                Thread(target=warp1).start()              # Запуск многопоточности
+                Thread(target=warp_red).start()              # Запуск многопоточности
                 logger.info("Запускаем поток карго по таймеру!")
                 cargo = Timer(RND(700,720), warp3)
                 cargo.start()
 
 
 
-# def warp2():                                          # 2 ПОТОК ОТВЕЧАЕТ ЗА КАРГО
+# def warp_nocheck():                                          # 2 ПОТОК ОТВЕЧАЕТ ЗА КАРГО
 #     while pyautogui.pixel(84,168) != (67,109,112):    # не равен ЗЕЛЕНОМУ
 #         pass                                          # ничего не делать
 #     else:                                             # или
@@ -90,7 +90,7 @@ def warp1():                                          # 1 ПОТОК ОТВЕЧ�
 #             functions.undock()                        # Андокаемся
 #             logger.info("Выставляем dock = 0")
 #             dock = 0                                  # Корабль не в доке
-#             Thread(target=warp2).start()              # Запуск многопоточности
+#             Thread(target=warp_nocheck).start()              # Запуск многопоточности
 @logger.catch
 def warp3():
     # time.sleep(RND(12,13) * 60)
@@ -125,13 +125,13 @@ def exit():
             print("Force exit!!!!")
             os._exit(1)
 
-Thread(target=warp1).start()
-# Thread(target=warp2).start()
+Thread(target=warp_red).start()
+# Thread(target=warp_nocheck).start()
 cargo = Timer(RND(700,720), warp3)
 cargo.start()
 # Thread(target=warp3).start()
 Thread(target=exit).start()
-print(Thread(target=warp1).is_alive())
+print(Thread(target=warp_red).is_alive())
 
 
 
